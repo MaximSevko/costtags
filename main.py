@@ -1,8 +1,8 @@
 
 from aws_cdk import App, Stack, Tags
 
-EC2 = App();
-the_best_stack = Stack(EC2, 'MarketingSystem')
+app = App();
+the_best_stack = Stack(app, 'MarketingSystem')
 
 # Add a tag to all constructs in the stack
 Tags.of(the_best_stack).add("StackType", "TheBest")
