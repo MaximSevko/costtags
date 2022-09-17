@@ -10,11 +10,15 @@ def get_ec2_instance_hourly_price():
     ]
 
     pricing_client = boto3.client('pricing', region_name='us-east-1')
+    
     print(pricing_client)
 
     
-    
-    response = pricing_client.describe_services(ServiceCode='AmazonEC2', Filters=filters)
+    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
+
+
+
+
 
     for price in response['PriceList']:
         price = json.loads(price)
