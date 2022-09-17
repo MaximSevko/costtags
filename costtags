@@ -25,8 +25,7 @@ def get_ec2_instance_hourly_price():
     return None
 
 
-if __name__ == "__main__":
 
-    ec2_instance_price = get_ec2_instance_hourly_price()
 
-    print(ec2_instance_price)
+ec2_instance_price = get_ec2_instance_hourly_price()
+print(ec2_instance_price)
