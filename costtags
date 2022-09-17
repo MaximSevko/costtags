@@ -4,18 +4,22 @@ from pkg_resources import resource_filename
 
 def get_ec2_instance_hourly_price():
                                        
- 
-    pricing_client = boto3.client('pricing', region_name='us-east-1')
+
+    filters = [
+        {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
+    ]
+
+    pricing_client = boto3.client('pricing')
     
     
     
-    response = pricing_client.get_products(ServiceCode='AmazonEC2')
+    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
 
     for price in response['PriceList']:
         price = json.loads(price)
         print(price)
 
-        for on_demand in price['OnDemand'].values():
+        for on_demand in price['terms']['OnDemand'].values():
             for price_dimensions in on_demand['priceDimensions'].values():
                 price_value = price_dimensions['pricePerUnit']['USD']
                 
