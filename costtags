@@ -14,9 +14,10 @@ def get_ec2_instance_hourly_price():
 
     
     response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
+    response2 = pricing_client.describe_services(ServiceCode='AmazonEC2')
 
 
-    print(response)
+    print(response2)
 
 
 
