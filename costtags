@@ -11,14 +11,19 @@ def get_ec2_instance_hourly_price():
 
     pricing_client = boto3.client('pricing', region_name='us-east-1')
     
+    print(pricing_client)
+    
+    
     response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
 
     for price in response['PriceList']:
         price = json.loads(price)
+        print(price)
 
         for on_demand in price['terms']['OnDemand'].values():
             for price_dimensions in on_demand['priceDimensions'].values():
                 price_value = price_dimensions['pricePerUnit']['USD']
+                
                 print(price_value)
             
         return float(price_value)
