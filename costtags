@@ -1,67 +1,32 @@
-#!/usr/bin/env python3
 import boto3
 import json
-from datetime import datetime
-from datetime import timedelta
-from collections import namedtuple
+from pkg_resources import resource_filename
+
+def get_ec2_instance_hourly_price():
+                                       
+
+    filters = [
+        {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
+    ]
+
+    pricing_client = boto3.client('pricing', region_name='eu-central-1')
+    
+    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
+
+    for price in response['PriceList']:
+        price = json.loads(price)
+
+        for on_demand in price['terms']['OnDemand'].values():
+            for price_dimensions in on_demand['priceDimensions'].values():
+                price_value = price_dimensions['pricePerUnit']['USD']
+                print(price_value)
+            
+        return float(price_value)
+    return None
 
 
-def get_current_pricing():
-    pricing = []
-    ec2_client = boto3.client('ec2')
-    ec2_resource = boto3.resource('ec2')
-    response = ec2_client.describe_instances()
-    all_instances = response['SpotInstanceRequests']
+if __name__ == "__main__":
 
-    for instance in all_instances:
-        instance = ec2_resource.Instance(instance['InstanceId'])
+    ec2_instance_price = get_ec2_instance_hourly_price()
 
-        for tag in instance.tags:
-                if tag['Key'] == 'Name':
-                    application = tag['Value']
-                    break
-
-        price = {
-                'application': application,
-                'instance_type': instance['LaunchSpecification']['InstanceType'],
-                'current_price': float(instance['SpotPrice']),
-                'bid_price': get_bid_price(instance['LaunchSpecification']['InstanceType'])
-        }
-
-        pricing.append(price)
-
-    return pricing
-
-
-def get_bid_price(instancetype):
-    instance_types = [instancetype]
-    start = datetime.now() - timedelta(days=1)
-    ec2 = boto3.client('ec2')
-
-    price_dict = ec2.describe_spot_price_history(
-        StartTime=start,
-        InstanceTypes=instance_types,
-        ProductDescriptions=['Linux/UNIX']
-    )
-
-    if len(price_dict.get('SpotPriceHistory')) > 0:
-        PriceHistory = namedtuple('PriceHistory', 'price timestamp')
-
-        for item in price_dict.get('SpotPriceHistory'):
-            price_list = [PriceHistory(round(float(item.get('SpotPrice')), 5), item.get('Timestamp'))]
-
-        price_list.sort(key=lambda tup: tup.timestamp, reverse=True)
-
-        bid_price = round(float(price_list[0][0]), 5)
-        leeway = round(float(bid_price / 100 * 10), 5)
-        bid_price = round(float(bid_price + leeway), 5)
-
-        return bid_price
-    else:
-        raise ValueError(f'Invalid instance type: {instancetype} provided. '
-                         'Please provide correct instance type.')
-
-
-if __name__ == '__main__':
-    current_pricing = get_current_pricing()
-    print(json.dumps(current_pricing, indent=4, default=str))
+    print(ec2_instance_price)
