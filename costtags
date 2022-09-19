@@ -8,15 +8,22 @@ def get_ec2_instance_hourly_price():
     
     response = client.describe_instances()
     ec2_resource = boto3.resource('ec2')
-
+    ec2_offer = awspricing.offer('AmazonEC2')
+    
     #print(instance) 
 
     
     #all_ec2_instances = response['Instances']
 
     for r in response['Reservations']:
-      for i in r['Instances']:
-        print(i['InstanceId'], i['InstanceType'])
+        print(r)
+        for i in r['Instances']:
+            print(i)
+
+            instanceId = i['InstanceId']
+            instanceType = i['InstanceType']
+        
+        
 
     
 #        response = boto3.tag_resources(
