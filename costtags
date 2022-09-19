@@ -16,9 +16,9 @@ def get_ec2_instance_hourly_price():
 
     for r in response['Reservations']:
       for i in r['Instances']:
-        print(i['InstanceId'], i['instance-type'])
+        print(i['InstanceId'])
         for b in i['BlockDeviceMappings']:
-          print(b['Ebs']['DeleteOnTermination'])
+          print(b['instance-type'])
     
 #        response = boto3.tag_resources(
 #        ResourceARNList=[
