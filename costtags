@@ -27,13 +27,14 @@ def get_ec2_instance_hourly_price():
             instancePlatform = i['PlatformDetails']
             
             instancePrice = ec2_offer.ondemand_hourly(instanceType, instancePlatform, region='eu-central-1')
+            print(instancePrice)
 
     
-            response = boto3.tag_resources(
-            ResourceARNList=[instanceId],
-              Tags={
-              'price': instancePrice
-           }
+#            response = boto3.tag_resources(
+#            ResourceARNList=[instanceId],
+#              Tags={
+#              'price': instancePrice
+#           }
     )
 #
 #
