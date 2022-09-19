@@ -18,7 +18,7 @@ def get_ec2_instance_hourly_price():
       for i in r['Instances']:
         print(i['InstanceId'])
         for b in i['BlockDeviceMappings']:
-          print(b['instance-type'])
+          print(b['InstanceType'])
     
 #        response = boto3.tag_resources(
 #        ResourceARNList=[
