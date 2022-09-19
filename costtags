@@ -20,7 +20,7 @@ def get_ec2_instance_hourly_price():
 
             print(i['InstanceId'])
             print(i['InstanceType'])
-            print(i)
+            print(i['PlatformDetails'])
 
             instanceId = i['InstanceId']
             instanceType = i['InstanceType']
