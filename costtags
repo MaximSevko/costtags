@@ -86,7 +86,7 @@ def price_information(instance_type, os):
                     if float(price) > 0:
                         break
                 except Exception as e:
-                    print(e)
+                    print(1)
 #            print(instance_price)
             return instance_price
         except Exception as e:
