@@ -72,7 +72,7 @@ def price_information(instance_type, os):
         FLT = '[{{"Field": "operatingSystem", "Value": "{o}", "Type": "TERM_MATCH"}},' \
               '{{"Field": "instanceType", "Value": "{t}", "Type": "TERM_MATCH"}}]'
         pricing = boto3.client('pricing', region_name='us-east-1')
-
+        i = 0
         f = FLT.format(t=instance_type, o=os)
         try:
             data = pricing.get_products(ServiceCode='AmazonEC2', Filters=json.loads(f))
@@ -86,8 +86,9 @@ def price_information(instance_type, os):
                     if float(price) > 0:
                         break
                 except Exception as e:
-                    print(1)
-#            print(instance_price)
+                    i = i + 1
+                    
+            print(i)
             return instance_price
         except Exception as e:
 #            print(e)
