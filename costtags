@@ -7,7 +7,11 @@ def get_ec2_instance_hourly_price():
     client = boto3.client('ec2')
     
     response = client.describe_instances()
+    print(response) 
+
+    
     all_ec2_instances = response['ResponseMetadata']
+    print(all_ec2_instances) 
 
 
     for instance in all_ec2_instances:
