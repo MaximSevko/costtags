@@ -17,7 +17,6 @@ def get_ec2_instance_hourly_price():
 
     for r in response['Reservations']:
         for i in r['Instances']:
-            print(i['Platform'])
             print(i['InstanceId'])
             print(i['InstanceType'])
 
