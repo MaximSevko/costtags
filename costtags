@@ -87,10 +87,10 @@ def price_information(instance_type, os):
                         break
                 except Exception as e:
                     print(e)
-            print(instance_price)
+#            print(instance_price)
             return instance_price
         except Exception as e:
-            print(e)
+#            print(e)
             return 0
 
 ec2_instance_price = get_ec2_instance_hourly_price()
