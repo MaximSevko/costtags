@@ -1,36 +1,50 @@
 import boto3
 import json
-from pkg_resources import resource_filename
+import awspricing
 
 def get_ec2_instance_hourly_price():
                                        
+    all_ec2_instances = boto3.describe_instances()
 
-    filters = [
-        {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
-    ]
-
-    pricing_client = boto3.client('pricing', region_name='us-east-1')
-    
-
-    
-    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
-    response2 = pricing_client.describe_services(ServiceCode='AmazonEC2')
-
-
-    print(response2)
-
-
-
-    for price in response['PriceList']:
-        price = json.loads(price)
-
-        for on_demand in price['terms']['OnDemand'].values():
-            for price_dimensions in on_demand['priceDimensions'].values():
-                price_value = price_dimensions['pricePerUnit']['USD']
-                
-                print(price_value)
-            
-        return float(price_value)
+    for instance in all_ec2_instances:
+        print(instance) 
+        
+#        response = boto3.tag_resources(
+#        ResourceARNList=[
+#        instance[arn],
+#          ],
+#          Tags={
+#          'string': 'string'
+#       }
+#)
+#
+#
+#    filters = [
+#        {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
+#    ]
+#
+#    pricing_client = boto3.client('pricing', region_name='us-east-1')
+#    
+#
+#    
+#    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
+#    response2 = pricing_client.describe_services(ServiceCode='AmazonEC2')
+#
+#
+#    print(response2)
+#
+#
+#
+#    for price in response['PriceList']:
+#        price = json.loads(price)
+#
+#        for on_demand in price['terms']['OnDemand'].values():
+#            for price_dimensions in on_demand['priceDimensions'].values():
+#                price_value = price_dimensions['pricePerUnit']['USD']
+#                
+#                print(price_value)
+#            
+#        return float(price_value)
     return None
 
 
