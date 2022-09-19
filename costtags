@@ -75,7 +75,7 @@ def price_information(instance_type, os):
 
         f = FLT.format(t=instance_type, o=os)
         try:
-            data = pricing.pricing_client.get_products(ServiceCode='AmazonEC2', Filters=json.loads(f))
+            data = pricing.get_products(ServiceCode='AmazonEC2', Filters=json.loads(f))
             instance_price = 0
             for price in data['PriceList']:
                 try:
