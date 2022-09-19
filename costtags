@@ -10,7 +10,7 @@ def get_ec2_instance_hourly_price():
     print(response) 
 
     
-    all_ec2_instances = response['ResponseMetadata']
+    all_ec2_instances = response['InstanceId']
     print(all_ec2_instances) 
 
 
