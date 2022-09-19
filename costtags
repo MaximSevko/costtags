@@ -16,7 +16,7 @@ def get_ec2_instance_hourly_price():
 
 
     for instance in response:
-        instance['InstanceId']
+        instance = instance['InstanceId']
 
         print(instance) 
         
