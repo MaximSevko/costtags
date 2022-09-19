@@ -5,12 +5,15 @@ import awspricing
 def get_ec2_instance_hourly_price():
               
     client = boto3.client('ec2')
-                                   
-    all_ec2_instances = client.describe_instances()
+    
+    response = client.describe_instances()
+    all_ec2_instances = response['ResponseMetadata']
 
-    for instance in all_ec2_instances['ResponseMetadata']:
+
+    for instance in all_ec2_instances:
         print(instance) 
         
+    
 #        response = boto3.tag_resources(
 #        ResourceARNList=[
 #        instance[arn],
