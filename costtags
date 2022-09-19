@@ -16,9 +16,8 @@ def get_ec2_instance_hourly_price():
 
 
     for instance in response:
-        instance = instance['InstanceId']
 
-        print(instance) 
+        print(instance['InstanceId']) 
         
     
 #        response = boto3.tag_resources(
