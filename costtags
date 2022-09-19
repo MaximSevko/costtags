@@ -7,8 +7,9 @@ def get_ec2_instance_hourly_price():
     client = boto3.client('ec2')
     
     response = client.describe_instances()
+    ec2_resource = boto3.resource('ec2')
     
-    print(json.loads(response)) 
+    print(ec2_resource) 
 
     
     #all_ec2_instances = response['Instances']
