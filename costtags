@@ -27,7 +27,7 @@ def get_ec2_instance_hourly_price():
             instanceType = i['InstanceType']
             instancePlatform = i['PlatformDetails']
 #            ec2_offer = awspricing.offer('AmazonEC2')
-            instancePrice = get_price(instanceType, instancePlatform)
+            instancePrice = get_price(instanceType, 'Linux')
 #            instancePrice = ec2_offer.ondemand_hourly(instanceType, operating_system ='Linux', region='eu-central-1')
             print(instancePrice)
 
