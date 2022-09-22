@@ -71,12 +71,9 @@ def get_ec2_instance_hourly_price():
 
 def get_price(instance_type, operating_system):
                                        
-    region_name = "eu-central-1"
-
     
     filters = [
         {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
-        {'Type': 'TERM_MATCH', 'Field': 'location', 'Value': region_name},
         {'Type': 'TERM_MATCH', 'Field': 'instanceType', 'Value': instance_type},
         {'Type': 'TERM_MATCH', 'Field': 'operatingSystem', 'Value': operating_system},
     ]
