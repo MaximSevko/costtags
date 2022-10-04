@@ -1,8 +1,6 @@
 import boto3
 import json
 import awspricing
-from pkg_resources import resource_filename
-
 
 def get_ec2_instance_hourly_price():
               
@@ -27,71 +25,40 @@ def get_ec2_instance_hourly_price():
             instanceType = i['InstanceType']
             instancePlatform = i['PlatformDetails']
 #            ec2_offer = awspricing.offer('AmazonEC2')
-            instancePrice = get_price(instanceType, 'Linux')
+            instancePrice = price_information(instanceType, 'Linux')
 #            instancePrice = ec2_offer.ondemand_hourly(instanceType, operating_system ='Linux', region='eu-central-1')
             print(instancePrice)
-
     
-#            response = boto3.tag_resources(
-#            ResourceARNList=[instanceId],
-#              Tags={
-#              'price': instancePrice
-#           }
-#    )
-#
-#
-#    filters = [
-#        {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
-#    ]
-#
-#    pricing_client = boto3.client('pricing', region_name='us-east-1')
-#    
-#
-#    
-#    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
-#    response2 = pricing_client.describe_services(ServiceCode='AmazonEC2')
-#
-#
-#    print(response2)
-#
-#
-#
-#    for price in response['PriceList']:
-#        price = json.loads(price)
-#
-#        for on_demand in price['terms']['OnDemand'].values():
-#            for price_dimensions in on_demand['priceDimensions'].values():
-#                price_value = price_dimensions['pricePerUnit']['USD']
-#                
-#                print(price_value)
-#            
-#        return float(price_value)
+
     return 1
 
 
-def get_price(instance_type, operating_system):
-                                       
-    
-    filters = [
-        {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
-        {'Type': 'TERM_MATCH', 'Field': 'instanceType', 'Value': instance_type},
-        {'Type': 'TERM_MATCH', 'Field': 'operatingSystem', 'Value': operating_system},
-    ]
+def price_information(instance_type, os):
+        # Search product filter
+        FLT = '[{{"Field": "operatingSystem", "Value": "{o}", "Type": "TERM_MATCH"}},' \
+              '{{"Field": "instanceType", "Value": "{t}", "Type": "TERM_MATCH"}}]'
+        pricing = boto3.client('pricing', region_name='us-east-1')
+        i = 0
+        f = FLT.format(t=instance_type, o=os)
+        try:
+            data = pricing.get_products(ServiceCode='AmazonEC2', Filters=json.loads(f))
+            instance_price = 0
+            for price in data['PriceList']:
+                try:
+                    first_id =  list(eval(price)['terms']['OnDemand'].keys())[0]
+                    price_data = eval(price)['terms']['OnDemand'][first_id]
+                    second_id = list(price_data['priceDimensions'].keys())[0]
+                    instance_price = price_data['priceDimensions'][second_id]['pricePerUnit']['USD']
+                    print(instance_price)
 
-    pricing_client = boto3.client('pricing', region_name='us-east-1')
-    
-    response = pricing_client.get_products(ServiceCode='AmazonEC2', Filters=filters)
-
-    for price in response['PriceList']:
-        price = json.loads(price)
-
-        for on_demand in price['terms']['OnDemand'].values():
-            for price_dimensions in on_demand['priceDimensions'].values():
-                price_value = price_dimensions['pricePerUnit']['USD']
-            
-        return float(price_value)
-    return None
-
+                    if float(price) > 0:
+                        break
+                except Exception as e:
+                    i = i + 1
+            return instance_price
+        except Exception as e:
+#            print(e)
+            return 0
 
 ec2_instance_price = get_ec2_instance_hourly_price()
 print(ec2_instance_price)
