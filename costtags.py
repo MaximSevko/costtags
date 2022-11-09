@@ -1,6 +1,5 @@
 import boto3
 import json
-#import awspricing
 
 def get_ec2_instance_hourly_price():
               
