@@ -28,7 +28,8 @@ def get_ec2_instance_hourly_price():
             instancePrice = price_information(instanceType, 'Linux')
 #            instancePrice = ec2_offer.ondemand_hourly(instanceType, operating_system ='Linux', region='eu-central-1')
             print(instancePrice)
-    
+            print(instancePrice)
+
 
     return 1
 
