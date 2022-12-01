@@ -28,7 +28,6 @@ def get_ec2_instance_hourly_price():
 #            instancePrice = ec2_offer.ondemand_hourly(instanceType, operating_system ='Linux', region='eu-central-1')
             print(instancePrice)
 
-
     return 1
 
 
@@ -49,6 +48,8 @@ def price_information(instance_type, os):
                     second_id = list(price_data['priceDimensions'].keys())[0]
                     instance_price = price_data['priceDimensions'][second_id]['pricePerUnit']['USD']
                     print(instance_price)
+                    
+                    print(price_data['priceDimensions']) ##
 
                     if float(price) > 0:
                         break
